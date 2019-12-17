@@ -15,7 +15,9 @@ AObjectCatcherManager::AObjectCatcherManager()
 
 	GroundPlane = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Ground Plane"));
 	SetRootComponent(GroundPlane);
-	
+
+	Cylinder = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("CylinderMesh"));
+	Cylinder->SetupAttachment(RootComponent);
 
 	SpawnBox = CreateDefaultSubobject<UBoxComponent>(TEXT("Spawn Box"));
 	SpawnBox->SetupAttachment(GroundPlane);
@@ -44,6 +46,16 @@ void AObjectCatcherManager::SpawnBall()
 		CurrentBallNumber++;
 		CurrentFallingBall = Ball;
 	}
+}
+
+float AObjectCatcherManager::GetCatcherToBallDistance_Implementation()
+{
+	auto XYBallPos = CurrentFallingBall->GetActorLocation();
+	XYBallPos.Z = 0;
+	auto CylinderXYPos = Cylinder->GetComponentLocation();
+	CylinderXYPos.Z = 0;
+
+	return FVector::Distance(XYBallPos, CylinderXYPos);
 }
 
 void AObjectCatcherManager::OnBallFell()
@@ -90,16 +102,12 @@ void AObjectCatcherManager::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	if (!bIsBallPreping) {
-		auto XYBallPos = CurrentFallingBall->GetActorLocation();
-		XYBallPos.Z = 0;
-		auto XYControllerPos = PlayerPawn->RightController->GetComponentLocation();
-		XYControllerPos.Z = 0;
 
-		auto Distance = FVector::Distance(XYBallPos, XYControllerPos);
+		auto Distance = GetCatcherToBallDistance();
 
 		RoundScore += Distance * DeltaTime;
 
-		History->AddRow(FName(EName::NAME_None, RowNumber), FObjectCatcherHistoryPoint(PlayerPawn->RightController->GetComponentLocation(),
+		History->AddRow(FName(EName::NAME_None, RowNumber), FObjectCatcherHistoryPoint(Cylinder->GetComponentLocation(),
 			PlayerPawn->RightController->GetComponentQuat(),
 			CurrentFallingBall->GetActorLocation(),
 			TimeSinceStart,

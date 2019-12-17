@@ -59,11 +59,15 @@ public:
 	UStaticMeshComponent* GroundPlane;
 
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
+	UStaticMeshComponent* Cylinder;
+
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
 	UBoxComponent* SpawnBox;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TSubclassOf<class ABallToCatch> BallClass;
 
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
 	ABallToCatch* CurrentFallingBall;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
@@ -75,7 +79,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SpawnBall();
 
-	
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	float GetCatcherToBallDistance();
+
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	float BallPrepTime = 1;
 	float CurrentPrepTime;

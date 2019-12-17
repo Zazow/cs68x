@@ -63,6 +63,7 @@ public:
 
 	int Direction = 1;
 	float alpha = 0;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	float Distance = 100.f;
 	void SimpleMotion(float DeltaTime);
 	void SimpleMotionLookAt(float DeltaTime);
