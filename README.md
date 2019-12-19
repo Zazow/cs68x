@@ -67,7 +67,7 @@ Kellnhofer, P., Didyk, P., Ritschel, T., Masia, B., Myszkowski, K., & Seidel, H.
 	What the authors of this paper did line up with many of the experiments that we will be conducting, however they’re main goals is different than ours. They seem to be extracting parallax depth information from videos and reinserting them as binocular disparity cues. Regardless, the related work section and experiment design is insightful.
 
 ## Files
-[Unreal Project files](RobotControl/README.md)
+[Unreal Project files](RobotControl/)
 
 
-[Python Scripts](scripts/README.md)
+[Python Scripts](scripts/)
