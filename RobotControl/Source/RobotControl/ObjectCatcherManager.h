@@ -19,31 +19,32 @@ struct FObjectCatcherHistoryPoint : public FTableRowBase {
 
 	}
 
-	FObjectCatcherHistoryPoint(FVector CPos, FQuat CQuat,FVector BPos, float Time, int BNum, float Score, float Dist) : FTableRowBase() {
+	FObjectCatcherHistoryPoint(FVector CPos,FVector BPos, float Time, int BNum, float RoundScore, float TotalScore, float Dist) : FTableRowBase() {
 		ControllerPosition = CPos;
-		ControllerRotation = CQuat;
 		BallPosition = BPos;
-		this->Time = Time;
+		this->DeltaTime = Time;
 		BallNumber = BNum;
-		this->Score = Score;
-		XYDistance = Dist;
+		this->RoundScore = RoundScore;
+		this->TotalScore = TotalScore;
+		XYDistanceNormalized = Dist;
 	}
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FVector ControllerPosition;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FQuat ControllerRotation;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FVector BallPosition;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int BallNumber;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float Time;
+	float DeltaTime;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float Score;
+	float RoundScore;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float XYDistance;
+	float TotalScore;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float XYDistanceNormalized;
 };
+
 
 
 UCLASS()
@@ -105,10 +106,25 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	UDataTable* History;
 
+	TMap<EMotionType, FString> MotionNames = {
+		TPair<EMotionType, FString>(EMotionType::MT_NONE, FString(TEXT("_No_Motion"))),
+		TPair<EMotionType, FString>(EMotionType::MT_SWEEPING, FString(TEXT("_Sweeping_Motion"))),
+		TPair<EMotionType, FString>(EMotionType::MT_SWEEPING_LOOKAT, FString(TEXT("_Sweeping_Motion_Lookat"))),
+		TPair<EMotionType, FString>(EMotionType::MT_REVOLVING_LOOKAT, FString(TEXT("_Revolving_Motion_Lookat"))),
+		TPair<EMotionType, FString>(EMotionType::MT_LOOKING, FString(TEXT("_Just_Looking_Motion")))
+	};
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	FString LogFileName;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	int NumberOfBallsToDrop = -1;
+
 	int RowNumber;
 	float TimeSinceStart;
 
 	float RoundScore = 0;
+	float TotalScore = 0;
 	
 protected:
 	// Called when the game starts or when spawned

@@ -27,7 +27,14 @@ public:
 	void OnControllerFar();
 };
 
-
+UENUM(BlueprintType)
+enum class EMotionType : uint8 {
+	MT_NONE 			UMETA(DisplayName = "No Motion"),
+	MT_SWEEPING			UMETA(DisplayName = "Sweeping Motion"),
+	MT_SWEEPING_LOOKAT	UMETA(DisplayName = "Sweeping Motion With Look At"),
+	MT_REVOLVING_LOOKAT	UMETA(DisplayName = "Revolving Motion With Look At"),
+	MT_LOOKING			UMETA(DisplayName = "Looking Motion")
+};
 
 UCLASS()
 class ROBOTCONTROL_API AVR_Pawn : public APawn
@@ -60,19 +67,25 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	float SimpleParallaxSpeed = 0.4;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	float Distance = 100.f;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	float Angle = 40.f;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	float RadiusSqrt = 100;
 
 	int Direction = 1;
 	float alpha = 0;
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	float Distance = 100.f;
+	
 	void SimpleMotion(float DeltaTime);
 	void SimpleMotionLookAt(float DeltaTime);
+	void SphericalMotion(float DeltaTime);
 	void SimpleRotattion(float DeltaTime);
 
-	TArray<void(AVR_Pawn::*)(float DeltaTime)> UpdaterFunctions = { &AVR_Pawn::SimpleMotion, &AVR_Pawn::SimpleMotionLookAt, &AVR_Pawn::SimpleRotattion };
+	//TArray<void(AVR_Pawn::*)(float DeltaTime)> UpdaterFunctions = { &AVR_Pawn::SimpleMotion, &AVR_Pawn::SimpleMotionLookAt, &AVR_Pawn::SphericalMotion, &AVR_Pawn::SimpleRotattion };
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	int UpdaterFunction;
+	EMotionType MotionType;
 
 protected:
 	// Called when the game starts or when spawned

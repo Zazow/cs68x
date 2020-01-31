@@ -22,6 +22,11 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	AObjectCatcherManager* ManagerObject;
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	UMaterialInterface* MaterialToUse;
+
+	UMaterialInstanceDynamic* MaterialInstance;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	FVector Gravity;

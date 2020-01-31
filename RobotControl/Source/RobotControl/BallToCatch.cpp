@@ -17,6 +17,7 @@ ABallToCatch::ABallToCatch()
 void ABallToCatch::BeginPlay()
 {
 	Super::BeginPlay();
+	MaterialInstance = StaticMesh->CreateDynamicMaterialInstance(0, MaterialToUse);
 	
 }
 

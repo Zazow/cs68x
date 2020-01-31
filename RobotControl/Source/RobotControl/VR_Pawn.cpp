@@ -46,7 +46,22 @@ void AVR_Pawn::SimpleMotionLookAt(float DeltaTime)
 {
 	SimpleMotion(DeltaTime);
 	auto LookAtVec = -Camera->GetComponentLocation();
+	Camera->SetWorldRotation(LookAtVec.Rotation());
+}
 
+void AVR_Pawn::SphericalMotion(float DeltaTime)
+{
+	alpha += Direction * SimpleParallaxSpeed * DeltaTime;
+	//UE_LOG(LogTemp, Warning, TEXT("MOVING"));
+	auto u = 2.f * alpha - 1.f;
+	Camera->SetWorldLocation(FVector(-RadiusSqrt*FMath::Cos(u * Angle/180.f*PI), RadiusSqrt*FMath::Sin(u * Angle / 180.f * PI), 85.f));
+
+	if (alpha >= 1 || alpha <= 0) {
+		alpha = alpha >= 1 ? 1 : 0;
+		Direction *= -1;
+	}
+
+	auto LookAtVec = -Camera->GetComponentLocation();
 	Camera->SetWorldRotation(LookAtVec.Rotation());
 }
 
@@ -55,14 +70,12 @@ void AVR_Pawn::SimpleRotattion(float DeltaTime)
 	alpha += Direction * SimpleParallaxSpeed * DeltaTime;
 	//UE_LOG(LogTemp, Warning, TEXT("MOCING"));
 	float Yaw = FMath::InterpEaseInOut<float>(-15, 15, alpha, 2);
-	SetActorRotation(FRotator(0, Yaw, 0));
+	SetActorRotation(FRotator(-20.f, Yaw, 0.f));
 
 	if (alpha >= 1 || alpha <= 0) {
 		alpha = alpha >= 1 ? 1 : 0;
 		Direction *= -1;
 	}
-
-
 }
 
 // Called when the game starts or when spawned
@@ -81,11 +94,26 @@ void AVR_Pawn::BeginPlay()
 		}
 	}
 	else {
-		if (UpdaterFunction == -1) {
+		switch (MotionType)
+		{
+		case EMotionType::MT_NONE:
 			CameraMotionUpdater = nullptr;
-		}
-		else {
-			CameraMotionUpdater = UpdaterFunctions[UpdaterFunction];
+			break;
+		case EMotionType::MT_SWEEPING:
+			CameraMotionUpdater = &AVR_Pawn::SimpleMotion;
+			break;
+		case EMotionType::MT_SWEEPING_LOOKAT:
+			CameraMotionUpdater = &AVR_Pawn::SimpleMotionLookAt;
+			break;
+		case EMotionType::MT_REVOLVING_LOOKAT:
+			CameraMotionUpdater = &AVR_Pawn::SphericalMotion;
+			break;
+		case EMotionType::MT_LOOKING:
+			CameraMotionUpdater = &AVR_Pawn::SimpleRotattion;
+			break;
+		default:
+			CameraMotionUpdater = nullptr;
+			break;
 		}
 	}
 }
