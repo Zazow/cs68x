@@ -117,8 +117,11 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	FString LogFileName;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Settings")
 	int NumberOfBallsToDrop = -1;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Settings")
+	float MaxSizeDelta = 0.f;
 
 	int RowNumber;
 	float TimeSinceStart;

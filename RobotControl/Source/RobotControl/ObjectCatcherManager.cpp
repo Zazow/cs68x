@@ -39,7 +39,7 @@ void AObjectCatcherManager::SpawnBall()
 	auto SpawnPoint = FMath::RandPointInBox(Box);
 
 	auto Transform = FTransform(SpawnPoint);
-	//Transform.SetScale3D((FVector)0.000001);
+	Transform.SetScale3D((FVector)FMath::RandRange(1 - MaxSizeDelta, 1 + MaxSizeDelta));
 
 	auto Ball = GetWorld()->SpawnActorDeferred<ABallToCatch>(BallClass, Transform, this);
 	if (Ball) {
