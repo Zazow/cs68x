@@ -11,7 +11,7 @@
 #include "ObjectCatcherManager.generated.h"
 
 
-USTRUCT()
+USTRUCT(BlueprintType)
 struct FObjectCatcherHistoryPoint : public FTableRowBase {
 	GENERATED_BODY()
 

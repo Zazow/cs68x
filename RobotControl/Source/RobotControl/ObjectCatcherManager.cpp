@@ -127,7 +127,7 @@ void AObjectCatcherManager::Tick(float DeltaTime)
 		RoundScore += DistanceNormalized;
 		TotalScore += DistanceNormalized;
 
-		History->AddRow(FName(EName::NAME_None, RowNumber), FObjectCatcherHistoryPoint(
+		History->AddRow(FName(*FString::FromInt(TimeSinceStart *1000000)), FObjectCatcherHistoryPoint(
 			Cylinder->GetComponentLocation(),
 			CurrentFallingBall->GetActorLocation(),
 			DeltaTime,
