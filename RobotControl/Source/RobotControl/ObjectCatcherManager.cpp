@@ -120,23 +120,12 @@ void AObjectCatcherManager::EndPlay(const EEndPlayReason::Type EndPlayReason)
 void AObjectCatcherManager::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	if (!bIsBallPreping) {
-
-		auto DistanceNormalized = GetCatcherToBallDistance() * DeltaTime;
 	
+	auto DistanceNormalized = GetCatcherToBallDistance() * DeltaTime;
+
+	if (!bIsBallPreping) {
 		RoundScore += DistanceNormalized;
 		TotalScore += DistanceNormalized;
-
-		History->AddRow(FName(*FString::FromInt(TimeSinceStart *1000000)), FObjectCatcherHistoryPoint(
-			Cylinder->GetComponentLocation(),
-			CurrentFallingBall->GetActorLocation(),
-			DeltaTime,
-			CurrentBallNumber,
-			RoundScore,
-			TotalScore,
-			DistanceNormalized)
-		);
-		RowNumber++;
 	}
 	else {
 		// prep the ball:
@@ -150,6 +139,19 @@ void AObjectCatcherManager::Tick(float DeltaTime)
 			bIsBallPreping = false;
 		}
 	}
+
+
+	History->AddRow(FName(*FString::FromInt(TimeSinceStart * 1000000)), FObjectCatcherHistoryPoint(
+		Cylinder->GetComponentLocation(),
+		CurrentFallingBall->GetActorLocation(),
+		DeltaTime,
+		CurrentBallNumber,
+		RoundScore,
+		TotalScore,
+		DistanceNormalized)
+	);
+	RowNumber++;
+
 	TimeSinceStart += DeltaTime;
 }
 
