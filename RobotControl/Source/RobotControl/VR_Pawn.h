@@ -62,7 +62,7 @@ public:
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
 	UMotionControllerComponent* LeftController;
 
-	void(AVR_Pawn::* CameraMotionUpdater)(float DeltaTime) ;
+	void(AVR_Pawn::* CameraMotionUpdater)(float DeltaTime);
 
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)

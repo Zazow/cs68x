@@ -17,10 +17,12 @@ struct FCloserObjectHistoryPoint : public FTableRowBase {
 
 	}
 
-	FCloserObjectHistoryPoint(float Distance, float Time, bool Correctness) : FTableRowBase() {
+	FCloserObjectHistoryPoint(float Distance, float Time, bool Correctness, float std, float slope) : FTableRowBase() {
 		DistanceBetweenObjects = Distance;
 		TimeToAnswer = Time;
 		Answer = Correctness;
+		Last30std = std;
+		SlopeSince30Trials = slope;
 	}
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -31,6 +33,12 @@ struct FCloserObjectHistoryPoint : public FTableRowBase {
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float TimeToAnswer;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float Last30std;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float SlopeSince30Trials;
 };
 
 UCLASS()
@@ -42,12 +50,19 @@ public:
 	// Sets default values for this actor's properties
 	ACloserObjectStaircaseManager();
 
+	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	float DistanceBetweenObjects;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	float MaxDistanceFromOrigin;
 
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
+	USceneComponent* MeshHolder;
+
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
+	USceneComponent* MeshHolderAlt;
+	
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
 	USceneComponent* LeftMeshHolder;
 
@@ -60,11 +75,35 @@ public:
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
 	UStaticMeshComponent* RightMesh;
 
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
+	USceneComponent* LeftMeshHolderAlt;
+
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
+	USceneComponent* RightMeshHolderAlt;
+
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
+	UStaticMeshComponent* LeftMeshAlt;
+
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
+	UStaticMeshComponent* RightMeshAlt;
+
+	void TickRotate(float DeltaTime);
+
+	void(ACloserObjectStaircaseManager::* TickRotateFunction)(float DeltaTime);
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	float TransitionSpeed;
+
+	int CurrentMeshes;
+
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	int TrialNumber=0;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	float StreakMultiplier = 1;
+	int UnStreakCounter;
+	bool bShouldSkipDynamicStepSize = false;
+
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	bool bLastResponse;
 
@@ -79,14 +118,18 @@ public:
 
 	FDateTime LastResponseTimeStamp;
 
-	bool bIsCleanserTrial;
+	bool bAlternateMeshesTrial;
 
 #if WITH_EDITOR
 	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent);
 #endif
-	UFUNCTION(BlueprintCallable)
-	void PositionMeshes(bool bWasResponseCorrect, bool bWasItCleanserTrial);
 
+	UFUNCTION(BlueprintCallable)
+	void PositionMeshes(bool bWasResponseCorrect, bool bAlternateMeshes);
+
+	float GetStdOfLast30Distances();
+
+	TArray<float> Distances;
 	UFUNCTION(BlueprintCallable)
 	void Response(int bCloserMeshResponse);
 

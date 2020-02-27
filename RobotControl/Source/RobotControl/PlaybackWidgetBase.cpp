@@ -52,6 +52,10 @@ FObjectCatcherHistoryPoint UPlaybackWidgetBase::GetInterpolatedHistoryPoint(floa
 	}
 
 	auto i = FindLatestPoint(TimeSinceStart);
+	if (i == INDEX_NONE) {
+		return FObjectCatcherHistoryPoint();
+	}
+
 	if (i == Data.Num() - 1) {
 		// there is nothing to interpolate.
 		return *Data[i].Value;
@@ -60,7 +64,7 @@ FObjectCatcherHistoryPoint UPlaybackWidgetBase::GetInterpolatedHistoryPoint(floa
 	auto A = Data[i].Value;
 	auto B = Data[i + 1].Value;
 	float alpha = (TimeSinceStart - Data[i].Key) / (Data[i + 1].Key - Data[i].Key);
-	check(alpha >= 0 && alpha < 1);
+	check(alpha >= 0 && alpha <= 1);
 
 	auto Result = FObjectCatcherHistoryPoint(
 		FMath::Lerp<FVector>(A->ControllerPosition, B->ControllerPosition, alpha),
