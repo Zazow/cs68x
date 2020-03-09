@@ -11,7 +11,8 @@
 /**
  * 
  */
-UCLASS()
+#if WITH_EDITOR
+UCLASS(config = Editor)
 class ROBOTCONTROL_API UPlaybackWidgetBase : public UEditorUtilityWidget
 {
 	GENERATED_BODY()
@@ -36,3 +37,5 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	float Duration;
 };
+
+#endif

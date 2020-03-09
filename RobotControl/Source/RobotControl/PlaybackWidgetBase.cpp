@@ -7,6 +7,7 @@
 #include "Developer/DesktopPlatform/Public/DesktopPlatformModule.h"
 #include "Interfaces/IMainFrameModule.h"
 
+#if WITH_EDITOR
 void UPlaybackWidgetBase::OpenFileDialog(const FString& DialogTitle, const FString& DefaultPath, const FString& FileTypes, FString& OutFileName)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Opening Dialog"));
@@ -94,3 +95,4 @@ int UPlaybackWidgetBase::FindLatestPoint(float Time)
 	// if all history points are smaller than time, than the last entry is the latest point that is smaller than time.
 	return Data.Num() - 1;
 }
+#endif

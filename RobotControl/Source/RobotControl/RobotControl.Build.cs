@@ -8,11 +8,22 @@ public class RobotControl : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "HeadMountedDisplay", "SlateCore"});
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "HeadMountedDisplay"});
 
         //PublicAdditionalLibraries.Add(@"C:/Users/Ziyad/Documents/Unreal Projects/RobotControl/Binaries/Win64/libnlopt.dll.a");
         //PublicAdditionalLibraries.Add(@"C:/Users/Ziyad/Documents/Unreal Projects/RobotControl/Binaries/Win64/libnlopt.dll");
-        
+
+        if (Target.Type == TargetRules.TargetType.Editor)
+        {
+            PublicDependencyModuleNames.AddRange(
+            new string[]
+            {
+                "SlateCore",
+                "UMG",
+                "Blutility"
+            }
+            );
+        }
 
         PrivateDependencyModuleNames.AddRange(new string[] {  });
 

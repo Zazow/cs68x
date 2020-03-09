@@ -113,6 +113,11 @@ void ACloserObjectStaircaseManager::PositionMeshes(bool bWasResponseCorrect, boo
 
 		LeftMeshAlt->SetRelativeRotation(FMath::VRand().Rotation());
 		RightMeshAlt->SetRelativeRotation(FMath::VRand().Rotation());
+
+		if (bRandomizeSize) {
+			LeftMeshAlt->SetRelativeScale3D((FVector)FMath::FRandRange(1.f - SizeDelta, 1 + SizeDelta));
+			RightMeshAlt->SetRelativeScale3D((FVector)FMath::FRandRange(1.f - SizeDelta, 1 + SizeDelta));
+		}
 	}
 	else {
 		LeftMesh->SetRelativeLocation(FVector(-Rand * CurrentDistance / 2.f, 0.f, 0.f));
@@ -120,6 +125,11 @@ void ACloserObjectStaircaseManager::PositionMeshes(bool bWasResponseCorrect, boo
 
 		LeftMesh->SetRelativeRotation(FMath::VRand().Rotation());
 		RightMesh->SetRelativeRotation(FMath::VRand().Rotation());
+
+		if (bRandomizeSize) {
+			LeftMesh->SetRelativeScale3D((FVector)FMath::FRandRange(1.f - SizeDelta, 1 + SizeDelta));
+			RightMesh->SetRelativeScale3D((FVector)FMath::FRandRange(1.f - SizeDelta, 1 + SizeDelta));
+		}
 	}
 }
 

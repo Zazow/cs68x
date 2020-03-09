@@ -94,6 +94,11 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	float TransitionSpeed;
 
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	bool bRandomizeSize;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	float SizeDelta=0.1;
+
 	int CurrentMeshes;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
